@@ -1,0 +1,31 @@
+# HR 系统路由实验配置
+# 覆盖 base_config.yaml 中的参数
+
+training:
+  # HR 场景建议更多轮数
+  epochs: 5
+  
+  # 稍低的学习率，避免过拟合
+  learning_rate: 1.0e-4
+  
+  # 增加 batch size 提高稳定性
+  per_device_train_batch_size: 8
+  gradient_accumulation_steps: 2
+
+model:
+  lora:
+    # HR 场景复杂度中等，使用较大 rank
+    rank: 32
+    alpha: 32
+
+logging:
+  wandb:
+    project: "functiongemma-hr-routing"
+    name: "hr-routing-v1"
+
+data:
+  # HR 特定列名配置
+  columns:
+    user_prompt: "员工问题"
+    tool_name: "HR 功能"
+    tool_args: "参数"

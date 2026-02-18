@@ -1,0 +1,144 @@
+# FunctionGemma-Unsloth-Enterprise-Tuner Base Configuration
+# Use OmegaConf to load and merge with experiment-specific configs
+
+# ============================================================
+# Model Configuration
+# ============================================================
+model:
+  # HuggingFace model path
+  name: "google/functiongemma-270m-it"
+  
+  # Maximum sequence length (FunctionGemma supports up to 32K)
+  max_seq_length: 2048
+  
+  # Data type for training (bfloat16 recommended for Ampere+)
+  dtype: "bfloat16"  # Options: "float16", "bfloat16", "float32"
+  
+  # LoRA configuration
+  lora:
+    enabled: true
+    rank: 16
+    alpha: 16
+    dropout: 0.0
+    target_modules:
+      - "q_proj"
+      - "k_proj"
+      - "v_proj"
+      - "o_proj"
+      - "gate_proj"
+      - "up_proj"
+      - "down_proj"
+    bias: "none"
+    use_gradient_checkpointing: true
+  
+  # Inference parameters (Google official recommendations)
+  inference:
+    top_k: 64
+    top_p: 0.95
+    temperature: 1.0
+    max_new_tokens: 128
+
+# ============================================================
+# Data Configuration
+# ============================================================
+data:
+  # Raw data directory (Excel/CSV files)
+  raw_dir: "data/raw"
+  
+  # Processed data directory (JSONL files)
+  processed_dir: "data/processed"
+  
+  # Training/Validation split ratio
+  train_split: 0.9
+  
+  # Input file format: "excel", "csv", "jsonl"
+  input_format: "excel"
+  
+  # Column names in input files
+  columns:
+    user_prompt: "User Prompt"
+    tool_name: "Tool Name"
+    tool_args: "Tool Args"
+  
+  # Data validation
+  validate:
+    check_empty_tool_name: true
+    check_valid_json_args: true
+    max_sequence_length: 2048
+
+# ============================================================
+# Training Configuration
+# ============================================================
+training:
+  # Number of training epochs
+  epochs: 3
+  
+  # Batch size per device
+  per_device_train_batch_size: 4
+  per_device_eval_batch_size: 4
+  
+  # Gradient accumulation
+  gradient_accumulation_steps: 4
+  
+  # Learning rate
+  learning_rate: 2.0e-4
+  
+  # Learning rate scheduler
+  lr_scheduler_type: "cosine"
+  warmup_ratio: 0.1
+  
+  # Weight decay
+  weight_decay: 0.01
+  
+  # Optimizer
+  optimizer: "adamw_torch"
+  
+  # Logging
+  logging_steps: 10
+  save_steps: 100
+  eval_steps: 100
+  
+  # Early stopping
+  early_stopping: false
+  early_stopping_patience: 3
+  
+  # Seed for reproducibility
+  seed: 42
+
+# ============================================================
+# Logging & Monitoring Configuration
+# ============================================================
+logging:
+  # Weights & Biases
+  wandb:
+    enabled: true
+    project: "functiongemma-enterprise-tuner"
+    entity: null  # Set to your W&B username/team
+    name: null    # Auto-generated if null
+    
+  # Local logging
+  output_dir: "outputs"
+  log_dir: "outputs/logs"
+  
+  # Console logging
+  console_logging: true
+  logging_level: "INFO"
+
+# ============================================================
+# Export Configuration
+# ============================================================
+export:
+  # Export formats
+  formats:
+    - "pytorch"
+    - "gguf"
+  
+  # GGUF quantization
+  gguf:
+    quantization: "q8_0"  # Options: "f16", "q8_0", "q4_k_m", "q4_0"
+    
+  # Merge LoRA adapters with base model
+  merge_lora: true
+  
+  # Export directory
+  export_dir: "outputs/models"

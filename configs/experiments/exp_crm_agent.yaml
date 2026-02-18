@@ -1,0 +1,28 @@
+# CRM 系统 Agent 实验配置
+
+training:
+  # CRM 场景通常数据量大，减少轮数
+  epochs: 3
+  
+  # 标准学习率
+  learning_rate: 2.0e-4
+  
+  # 大批次训练
+  per_device_train_batch_size: 16
+  gradient_accumulation_steps: 4
+
+model:
+  lora:
+    # CRM 场景复杂，使用标准 rank
+    rank: 16
+    alpha: 16
+
+logging:
+  wandb:
+    project: "functiongemma-crm-agent"
+    name: "crm-agent-v1"
+
+export:
+  # CRM 部署到边缘设备，使用高压缩量化
+  gguf:
+    quantization: "q4_k_m"
