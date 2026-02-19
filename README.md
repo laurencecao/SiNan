@@ -8,10 +8,11 @@
 ## ✨ 特性
 
 - 🚀 **极速训练** - 基于 Unsloth，训练速度提升 2 倍，显存减少 60%
+- 📓 **交互式 Notebook** - Jupyter Notebook 可视化训练，实时查看 Loss 曲线和指标
 - 📊 **Excel/CSV 支持** - 直接将企业业务数据转换为训练格式
 - 🎯 **FunctionGemma 优化** - 专为函数调用优化的轻量级模型 (270M)
 - 🔧 **配置化** - OmegaConf 实现"配置即代码"
-- 📈 **实时监控** - WandB 集成，实时查看训练指标
+- 📈 **实时监控** - WandB 集成 + Notebook 实时可视化，多维度查看训练指标
 - 📦 **一键部署** - 支持 GGUF 量化，可部署到 CPU/GPU/边缘设备
 
 ## 📦 安装
@@ -42,6 +43,31 @@ conda activate function_gemma_env
 ```
 
 ## 🚀 快速开始
+
+我们提供两种训练方式：**交互式 Jupyter Notebook**（推荐初学者）和 **命令行 CLI**（适合生产环境）。
+
+### 📝 方式一：交互式 Notebook（推荐）
+
+使用 Jupyter Notebook 进行可视化训练：
+
+```bash
+# 启动 Jupyter
+jupyter notebook notebooks/
+
+# 打开 training.ipynb，按顺序运行 Cell
+```
+
+**Notebook 优势：**
+- 📊 **实时可视化** - Loss 曲线、学习率动态绘制
+- 🎛️ **交互式配置** - 拖拽滑块调整参数
+- 🔍 **即时反馈** - 每步训练结果立即可见
+- 🧪 **快速实验** - 无需写代码即可对比多组参数
+
+详细使用指南：[notebooks/TRAINING_GUIDE.md](notebooks/TRAINING_GUIDE.md)
+
+### 🖥️ 方式二：命令行 CLI
+
+适合自动化部署和批处理：
 
 ### 1. 准备数据
 
@@ -131,6 +157,9 @@ SiNan/
 │   ├── raw/                    # 原始 Excel/CSV
 │   └── processed/              # 处理后的 JSONL
 ├── notebooks/                  # Jupyter Notebooks
+│   ├── training.ipynb          # 交互式训练 Notebook
+│   ├── TRAINING_GUIDE.md       # Notebook 详细使用指南
+│   └── README.md               # Notebooks 说明
 ├── outputs/                    # 输出目录
 │   ├── logs/                   # 训练日志
 │   └── models/                 # 训练好的模型
@@ -214,6 +243,20 @@ You are a model that can do function calling with the following functions
 
 ## 📈 监控与可视化
 
+### 🎯 Notebook 实时可视化
+
+使用 `training.ipynb` 可获得最佳可视化体验：
+
+- **实时指标曲线** - Loss、学习率、梯度范数动态绘制
+- **交互式参数调整** - 拖拽滑块实时修改训练参数
+- **数据分布可视化** - 文本长度、工具类别统计图表
+- **即时推理测试** - 训练完成后立即测试模型效果
+
+启动 Notebook：
+```bash
+jupyter notebook notebooks/training.ipynb
+```
+
 ### WandB 集成
 
 训练自动记录到 Weights & Biases:
@@ -256,6 +299,50 @@ bash scripts/setup_env.sh
 ```
 
 ## 📝 最佳实践
+
+### Notebook 使用技巧
+
+**1. 快速原型验证**
+```python
+# 先使用小参数快速验证
+epochs = 1
+batch_size = 2
+data_subset = 100  # 只用 100 条样本
+```
+
+**2. 多组实验对比**
+- 打开多个 Notebook 窗口
+- 使用不同参数并行实验
+- 对比不同配置的训练曲线
+
+**3. 显存不足时的调整**
+```python
+# 减小 batch size + 增加梯度累积
+batch_size = 2
+gradient_accumulation_steps = 8  # 等效 batch size = 16
+
+# 减小序列长度
+max_seq_length = 1024  # 默认 2048
+
+# 降低 LoRA rank
+lora_rank = 8  # 默认 16
+```
+
+**4. 断点续训**
+```python
+# 修改输出目录为已有路径
+output_dir = 'outputs/models/experiment_20240115_120000'
+# 会自动加载已有模型继续训练
+```
+
+**5. 保存最佳模型**
+```python
+# 在训练配置中启用早停
+early_stopping = true
+early_stopping_patience = 3
+```
+
+详细技巧参考：[notebooks/TRAINING_GUIDE.md](notebooks/TRAINING_GUIDE.md#使用技巧)
 
 ### 数据量建议
 
@@ -311,12 +398,32 @@ training:
 - 增加每函数样本数
 - 调整推理参数 (temperature, top_k, top_p)
 
+### Notebook 图表不显示
+
+- 确保已安装 `ipywidgets`: `pip install ipywidgets`
+- 启用扩展: `jupyter nbextension enable --py widgetsnbextension`
+- 重启 Jupyter Kernel
+
+### Notebook Kernel 崩溃
+
+- 检查 GPU 显存是否耗尽: `nvidia-smi`
+- 减小 batch size 和序列长度
+- 关闭其他 Notebook 释放资源
+- 详细解决方案: [TRAINING_GUIDE.md#常见问题](notebooks/TRAINING_GUIDE.md#常见问题)
+
 ## 📚 参考资料
 
+### 官方文档
 - [FunctionGemma 官方文档](https://ai.google.dev/gemma/docs/functiongemma)
 - [Unsloth 文档](https://unsloth.ai/docs)
 - [HuggingFace TRL](https://huggingface.co/docs/trl)
 - [OmegaConf](https://omegaconf.readthedocs.io/)
+
+### 项目文档
+- [📓 Notebook 使用指南](notebooks/TRAINING_GUIDE.md) - 详细的交互式训练教程
+- [🔧 配置说明](#配置说明) - 配置文件详解
+- [📊 训练数据格式](#训练数据格式) - 数据格式规范
+- [📝 最佳实践](#最佳实践) - 推荐的使用方法
 
 ## 🤝 贡献
 
