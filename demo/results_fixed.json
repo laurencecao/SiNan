@@ -1,0 +1,702 @@
+[
+    {
+        "question": "给张三发邮件，标题你好，内容测试\n",
+        "result": "<start_function_call>call:send_email{body:<escape>Hi Zhang San!,\\nThank you for your message. \\nWe'll definitely aim to get you things sorted out. \\n\\nBest regards,<escape>,receiver:<escape>Zhang San<escape>,title:<escape>Hello!<escape>}<end_function_call>",
+        "verified_result": true,
+        "verified_func": true,
+        "verified_params": true
+    },
+    {
+        "question": "发送邮件给李四，主题是会议通知\n",
+        "result": "<start_function_call>call:send_email{body:<escape> 重要会议通知。<escape>,receiver:<escape> 李四<escape>,title:<escape> 会议通知<escape>}<end_function_call>",
+        "verified_result": true,
+        "verified_func": true,
+        "verified_params": true
+    },
+    {
+        "question": "帮我发一封邮件给王五，正文是 hello\n",
+        "result": "<start_function_call>call:send_email{body:<escape> 发一封邮件给王五<escape>,receiver:<escape> 王五<escape>,title:<escape> 关于 hello<escape>}<end_function_call>",
+        "verified_result": false,
+        "verified_func": true,
+        "verified_params": false
+    },
+    {
+        "question": "发邮件给赵六，标题 greeting\n",
+        "result": "<start_function_call>call:send_email{title:<escape>greeting<escape>,receiver:<escape> 赵六<escape>}<end_function_call>",
+        "verified_result": true,
+        "verified_func": true,
+        "verified_params": true
+    },
+    {
+        "question": "发送 email 给 test@example.com，内容 hi\n",
+        "result": "<start_function_call>call:send_email{body:<escape>Hi! It's nice to meet you. Thanks for exchanging so many experiences.",
+        "verified_result": false,
+        "verified_func": true,
+        "verified_params": false
+    },
+    {
+        "question": "打电话给 13800138000\n",
+        "result": "<start_function_call>call:send_email{receiver:<escape>13800138000<escape>,title:<escape>Call him!<escape>}<end_function_call>",
+        "verified_result": false,
+        "verified_func": false,
+        "verified_params": false
+    },
+    {
+        "question": "拨打号码 13912345678\n",
+        "result": "<start_function_call>call:get_phone_location{tel:<escape>13912345678<escape>}<end_function_call>",
+        "verified_result": false,
+        "verified_func": false,
+        "verified_params": false
+    },
+    {
+        "question": "呼叫 13700000000\n",
+        "result": "<start_function_call>call:ping_website_speed{host:<escape>13700000000<escape>}<end_function_call>",
+        "verified_result": false,
+        "verified_func": false,
+        "verified_params": false
+    },
+    {
+        "question": "帮我拨号 13688888888\n",
+        "result": "<start_function_call>call:ping_website_speed{host:<escape>qq.com<escape>}<end_function_call>",
+        "verified_result": false,
+        "verified_func": false,
+        "verified_params": false
+    },
+    {
+        "question": "打电话联系 13511112222\n",
+        "result": "<start_function_call>call:send_email{receiver:<escape>13511112222<escape>,title:<escape> 联系 13511112222<escape>}<end_function_call>",
+        "verified_result": false,
+        "verified_func": false,
+        "verified_params": false
+    },
+    {
+        "question": "现在几点了\n",
+        "result": "I apologize, but I cannot assist with calculating or retrieving current time details. My current capabilities are limited to calling specific tools for managing email, phone, transportation, and food information. I cannot provide precise current time information.",
+        "verified_result": false,
+        "verified_func": false,
+        "verified_params": false
+    },
+    {
+        "question": "查询当前时间\n",
+        "result": "<start_function_call>call:get_time{}<end_function_call>",
+        "verified_result": true,
+        "verified_func": true,
+        "verified_params": true
+    },
+    {
+        "question": "上海现在什么时间\n",
+        "result": "I cannot provide real-time current time information. My current capabilities are limited to calling specific tools for managing email, phone, transportation, and food, such as sending emails, querying time, retrieving data, and managing maps. I cannot assist with historical or current time-related queries.",
+        "verified_result": false,
+        "verified_func": false,
+        "verified_params": false
+    },
+    {
+        "question": "北京时间是多少\n",
+        "result": "<start_function_call>call:get_time{timezone:<escape>Asia/Beijing<escape>}<end_function_call>",
+        "verified_result": true,
+        "verified_func": true,
+        "verified_params": true
+    },
+    {
+        "question": "获取当前系统时间\n",
+        "result": "<start_function_call>call:get_time{}<end_function_call>",
+        "verified_result": true,
+        "verified_func": true,
+        "verified_params": true
+    },
+    {
+        "question": "移动到 x1 y2 z3\n",
+        "result": "<start_function_call>call:move_to{position_x:3,position_y:2,position_z:3}<end_function_call>",
+        "verified_result": false,
+        "verified_func": true,
+        "verified_params": false
+    },
+    {
+        "question": "车子开到坐标 1.1, 2.2, 3.3\n",
+        "result": "<start_function_call>call:move_to{position_x:1.1,position_y:2.2,position_z:3.3}<end_function_call>",
+        "verified_result": true,
+        "verified_func": true,
+        "verified_params": true
+    },
+    {
+        "question": "移动位置到 10, 20, 30\n",
+        "result": "<start_function_call>call:move_to{position_x:10,position_y:20,position_z:30}<end_function_call>",
+        "verified_result": true,
+        "verified_func": true,
+        "verified_params": true
+    },
+    {
+        "question": "设置汽车位置为 5, 5, 5\n",
+        "result": "<start_function_call>call:move_to{position_x:5,position_y:5,position_z:5}<end_function_call>",
+        "verified_result": true,
+        "verified_func": true,
+        "verified_params": true
+    },
+    {
+        "question": "机器人移动到坐标 0, 0, 0\n",
+        "result": "<start_function_call>call:move_to{position_x:0,position_y:0,position_z:0}<end_function_call>",
+        "verified_result": true,
+        "verified_func": true,
+        "verified_params": true
+    },
+    {
+        "question": "北京天气多少度\n",
+        "result": "I apologize, but I cannot provide current or specific weather information for Beijing. My current capabilities are focused on assisting with various tasks such as sending emails, managing phone numbers, retrieving data, and checking time. I cannot access or provide weather-related details.",
+        "verified_result": false,
+        "verified_func": false,
+        "verified_params": false
+    },
+    {
+        "question": "查询上海气温\n",
+        "result": "<start_function_call>call:get_gas_price{province:<escape> 上海<escape>}<end_function_call>",
+        "verified_result": false,
+        "verified_func": false,
+        "verified_params": false
+    },
+    {
+        "question": "深圳现在热吗查温度\n",
+        "result": "<start_function_call>call:get_current_temperature{location:<escape> 深圳<escape>}<end_function_call>",
+        "verified_result": true,
+        "verified_func": true,
+        "verified_params": true
+    },
+    {
+        "question": "纽约当前温度\n",
+        "result": "<start_function_call>call:get_current_temperature{location:<escape>New York<escape>}<end_function_call>",
+        "verified_result": true,
+        "verified_func": true,
+        "verified_params": true
+    },
+    {
+        "question": "广州天气温度查询\n",
+        "result": "<start_function_call>call:get_time{}<end_function_call>",
+        "verified_result": false,
+        "verified_func": false,
+        "verified_params": false
+    },
+    {
+        "question": "今天农历是多少\n",
+        "result": "I apologize, but I cannot assist with calculating or retrieving current agricultural dates. My current tools are designed for managing logistics, time, and personal information, and do not have the capability to access or provide historical agricultural data.",
+        "verified_result": false,
+        "verified_func": false,
+        "verified_params": false
+    },
+    {
+        "question": "获取农历日期\n",
+        "result": "<start_function_call>call:get_time{}<end_function_call>",
+        "verified_result": false,
+        "verified_func": false,
+        "verified_params": false
+    },
+    {
+        "question": "查一下今天的阴历\n",
+        "result": "<start_function_call>call:get_current_temperature{location:<escape>Asia/Shanghai<escape>}<end_function_call>",
+        "verified_result": false,
+        "verified_func": false,
+        "verified_params": false
+    },
+    {
+        "question": "返回农历信息 json 格式\n",
+        "result": "<start_function_call>call:get_domain_whois{url:<escape>example.com<escape>}<end_function_call>",
+        "verified_result": false,
+        "verified_func": false,
+        "verified_params": false
+    },
+    {
+        "question": "今天是什么农历日子\n",
+        "result": "I apologize, but I cannot assist with planning or retrieving specific dates like the agricultural calendar. My current tools are focused on managing email, phone, time, temperature, gas prices, food calorie queries, and website browsing. I cannot access or retrieve historical agricultural calendar information.",
+        "verified_result": false,
+        "verified_func": false,
+        "verified_params": false
+    },
+    {
+        "question": "查手机号 13800138000 归属地\n",
+        "result": "<start_function_call>call:get_phone_location{tel:<escape>13800138000<escape>}<end_function_call>",
+        "verified_result": true,
+        "verified_func": true,
+        "verified_params": true
+    },
+    {
+        "question": "这个电话 13900000000 是哪里的\n",
+        "result": "<start_function_call>call:ping_website_speed{host:<escape>1390000000<escape>}<end_function_call>",
+        "verified_result": false,
+        "verified_func": false,
+        "verified_params": false
+    },
+    {
+        "question": "查询号码 13712345678 信息\n",
+        "result": "<start_function_call>call:get_phone_location{tel:<escape>13712345678<escape>}<end_function_call>",
+        "verified_result": true,
+        "verified_func": true,
+        "verified_params": true
+    },
+    {
+        "question": "手机归属地查询 13600000000\n",
+        "result": "<start_function_call>call:get_domain_whois{url:<escape>13600000000<escape>}<end_function_call>",
+        "verified_result": false,
+        "verified_func": false,
+        "verified_params": false
+    },
+    {
+        "question": "帮忙查一下 13500000000 的归属地\n",
+        "result": "<start_function_call>call:get_domain_whois{url:<escape>1350000000<escape>}<end_function_call>",
+        "verified_result": false,
+        "verified_func": false,
+        "verified_params": false
+    },
+    {
+        "question": "查域名 google.com 的 whois\n",
+        "result": "<start_function_call>call:whois{url:<escape>google.com<escape>}<end_function_call>",
+        "verified_result": false,
+        "verified_func": false,
+        "verified_params": true
+    },
+    {
+        "question": "查询 baidu.com 注册信息\n",
+        "result": "<start_function_call>call:get_domain_whois{url:<escape>baidu.com<escape>}<end_function_call>",
+        "verified_result": true,
+        "verified_func": true,
+        "verified_params": true
+    },
+    {
+        "question": "看看 taobao.com 的 whois 数据\n",
+        "result": "<start_function_call>call:get_domain_whois{url:<escape>taobao.com<escape>}<end_function_call>",
+        "verified_result": true,
+        "verified_func": true,
+        "verified_params": true
+    },
+    {
+        "question": "域名查询 whois qq.com\n",
+        "result": "<start_function_call>call:get_domain_whois{url:<escape>qq.com<escape>}<end_function_call>",
+        "verified_result": true,
+        "verified_func": true,
+        "verified_params": true
+    },
+    {
+        "question": "获取 github.com 的 whois 信息\n",
+        "result": "<start_function_call>call:get_domain_whois{url:<escape>github.com<escape>}<end_function_call>",
+        "verified_result": true,
+        "verified_func": true,
+        "verified_params": true
+    },
+    {
+        "question": "广东油价多少\n",
+        "result": "I cannot provide specific oil prices for Guangdong province. My available tools are focused on various logistics and data functions, such as sending emails, managing phone numbers, retrieving weather information, and checking website speed. I cannot assist with financial or economic market analysis.",
+        "verified_result": false,
+        "verified_func": false,
+        "verified_params": false
+    },
+    {
+        "question": "查询北京汽油价格\n",
+        "result": "<start_function_call>call:get_gas_price{province:<escape>Beijing<escape>}<end_function_call>",
+        "verified_result": true,
+        "verified_func": true,
+        "verified_params": true
+    },
+    {
+        "question": "浙江油价信息\n",
+        "result": "<start_function_call>call:get_gas_price{province:<escape> 浙江<escape>}<end_function_call>",
+        "verified_result": true,
+        "verified_func": true,
+        "verified_params": true
+    },
+    {
+        "question": "查一下江苏的油价\n",
+        "result": "<start_function_call>call:get_gas_price{province:<escape> 江苏<escape>}<end_function_call>",
+        "verified_result": true,
+        "verified_func": true,
+        "verified_params": true
+    },
+    {
+        "question": "四川汽油价格查询\n",
+        "result": "<start_function_call>call:get_gas_price{province:<escape> 四川<escape>}<end_function_call>",
+        "verified_result": true,
+        "verified_func": true,
+        "verified_params": true
+    },
+    {
+        "question": "来一条舔狗日记\n",
+        "result": "<start_function_call>call:get_lunar_calendar{}<end_function_call>",
+        "verified_result": false,
+        "verified_func": false,
+        "verified_params": false
+    },
+    {
+        "question": "获取舔狗日记文本\n",
+        "result": "<start_function_call>call:get_express_info{id:<escape>lunar_calendar<escape>}<end_function_call>",
+        "verified_result": false,
+        "verified_func": false,
+        "verified_params": false
+    },
+    {
+        "question": "给我看个舔狗日记\n",
+        "result": "<start_function_call>call:get_express_info{id:<escape>lunar_calendar<escape>}<end_function_call>",
+        "verified_result": false,
+        "verified_func": false,
+        "verified_params": false
+    },
+    {
+        "question": "生成一段舔狗日记 json\n",
+        "result": "<start_function_call>call:get_express_info{id:<escape>lunar_calendar<escape>}<end_function_call>",
+        "verified_result": false,
+        "verified_func": false,
+        "verified_params": false
+    },
+    {
+        "question": "随机返回一条舔狗日记\n",
+        "result": "<start_function_call>call:get_lunar_calendar{}<end_function_call>",
+        "verified_result": false,
+        "verified_func": false,
+        "verified_params": false
+    },
+    {
+        "question": "查快递单号 123456\n",
+        "result": "<start_function_call>call:get_express_info{id:<escape>123456<escape>}<end_function_call>",
+        "verified_result": true,
+        "verified_func": true,
+        "verified_params": true
+    },
+    {
+        "question": "物流查询单号 SF123456\n",
+        "result": "<start_function_call>call:get_phone_location{tel:<escape>SF123456<escape>}<end_function_call>",
+        "verified_result": false,
+        "verified_func": false,
+        "verified_params": false
+    },
+    {
+        "question": "快递 123456789 到哪里了\n",
+        "result": "<start_function_call>call:get_express_info{id:<escape>123456789<escape>}<end_function_call>",
+        "verified_result": true,
+        "verified_func": true,
+        "verified_params": true
+    },
+    {
+        "question": "查询运单号 YT123456 信息\n",
+        "result": "<start_function_call>call:get_domain_whois{url:<escape>YT123456<escape>}<end_function_call>",
+        "verified_result": false,
+        "verified_func": false,
+        "verified_params": false
+    },
+    {
+        "question": "帮我查快递单号 ZT123456\n",
+        "result": "<start_function_call>call:get_domain_whois{url:<escape>yourdomain.com<escape>}<end_function_call>",
+        "verified_result": false,
+        "verified_func": false,
+        "verified_params": false
+    },
+    {
+        "question": "最近票房怎么样\n",
+        "result": "I can certainly look up recent box office data for you. Could you please specify the province or specific province you are interested in?",
+        "verified_result": false,
+        "verified_func": false,
+        "verified_params": false
+    },
+    {
+        "question": "查询全网票房\n",
+        "result": "<start_function_call>call:get_express_info{id:<escape>your_express_id<escape>}<end_function_call>",
+        "verified_result": false,
+        "verified_func": false,
+        "verified_params": false
+    },
+    {
+        "question": "电影票房排名\n",
+        "result": "<start_function_call>call:get_express_info{id:<escape>id<escape>}<end_function_call>",
+        "verified_result": false,
+        "verified_func": false,
+        "verified_params": false
+    },
+    {
+        "question": "获取票房数据 txt 格式\n",
+        "result": "<start_function_call>call:get_express_info{id:<escape>your_express_id<escape>}<end_function_call>",
+        "verified_result": false,
+        "verified_func": false,
+        "verified_params": false
+    },
+    {
+        "question": "今天电影票房多少\n",
+        "result": "I apologize, but I cannot assist with retrieving or querying movie box office data. My current tools are designed for specific business and logistics functions, such as managing emails, phone numbers, weather, food, and website management. I cannot browse or retrieve general movie statistics.",
+        "verified_result": false,
+        "verified_func": false,
+        "verified_params": false
+    },
+    {
+        "question": "查域名 github.com 注册情况\n",
+        "result": "<start_function_call>call:get_domain_reg{url:<escape>github.com<escape>}<end_function_call>",
+        "verified_result": true,
+        "verified_func": true,
+        "verified_params": true
+    },
+    {
+        "question": "查询 stackoverflow.com 是否注册\n",
+        "result": "<start_function_call>call:query_food_calories{food:<escape>apple<escape>}<end_function_call>",
+        "verified_result": false,
+        "verified_func": false,
+        "verified_params": false
+    },
+    {
+        "question": "域名注册查询 twitter.com\n",
+        "result": "<start_function_call>call:get_domain_whois{url:<escape>twitter.com<escape>}<end_function_call>",
+        "verified_result": true,
+        "verified_func": true,
+        "verified_params": true
+    },
+    {
+        "question": "看看 reddit.com 的注册信息\n",
+        "result": "<start_function_call>call:get_domain_whois{url:<escape>reddit.com<escape>}<end_function_call>",
+        "verified_result": true,
+        "verified_func": true,
+        "verified_params": true
+    },
+    {
+        "question": "车牌京 A88888 值多少钱\n",
+        "result": "I cannot provide real-time vehicle license plate value estimations. My current capabilities are limited to assisting with specific phone number and mapping functions. I cannot query or analyze vehicle data.",
+        "verified_result": false,
+        "verified_func": false,
+        "verified_params": false
+    },
+    {
+        "question": "评估车牌沪 C12345 价值\n",
+        "result": "<start_function_call>call:estimate_license_plate_value{che:<escape>C12345<escape>}<end_function_call>",
+        "verified_result": true,
+        "verified_func": true,
+        "verified_params": true
+    },
+    {
+        "question": "查询车牌粤 B12345 估值\n",
+        "result": "<start_function_call>call:estimate_license_plate_value{che:<escape>B12345<escape>}<end_function_call>",
+        "verified_result": true,
+        "verified_func": true,
+        "verified_params": true
+    },
+    {
+        "question": "车牌浙 A66666 估价\n",
+        "result": "<start_function_call>call:get_license_plate_value{che:<escape>ZEA66666<escape>}<end_function_call>",
+        "verified_result": false,
+        "verified_func": true,
+        "verified_params": false
+    },
+    {
+        "question": "苹果热量多少\n",
+        "result": "I cannot provide real-time or specific nutritional information such as the estimated caloric count or nutritional breakdown for apples. My current tools are designed for specific tasks like email management, phone number checking, mapping, and website analysis. I cannot assist with nutritional advice or estimations.",
+        "verified_result": false,
+        "verified_func": false,
+        "verified_params": false
+    },
+    {
+        "question": "查询米饭卡路里\n",
+        "result": "I apologize, but I cannot assist with querying or retrieving specific information regarding rice or cooking habits. My current capabilities are focused on interacting with various business and logistics tools such as email, phone, weather, time, and website management. I cannot connect to or query specific food or cooking databases.",
+        "verified_result": false,
+        "verified_func": false,
+        "verified_params": false
+    },
+    {
+        "question": "鸡胸肉有多少热量\n",
+        "result": "I cannot provide specific nutritional information or estimates for the amount of chicken breast you will gain. My available tools are focused on specific business functions like email management, phone calls, mapping, and data querying. I cannot assist with nutritional analysis or estimation of caloric intake.",
+        "verified_result": false,
+        "verified_func": false,
+        "verified_params": false
+    },
+    {
+        "question": "查一下可乐的热量\n",
+        "result": "<start_function_call>call:get_gas_price{province:<escape>California<escape>}<end_function_call>",
+        "verified_result": false,
+        "verified_func": false,
+        "verified_params": false
+    },
+    {
+        "question": "获取 google.com 的图标\n",
+        "result": "<start_function_call>call:get_webpage_images{url:<escape>google.com<escape>}<end_function_call>",
+        "verified_result": false,
+        "verified_func": false,
+        "verified_params": true
+    },
+    {
+        "question": "下载 baidu.com 的 favicon\n",
+        "result": "<start_function_call>call:get_website_favicon{url:<escape>baidu.com<escape>}<end_function_call>",
+        "verified_result": true,
+        "verified_func": true,
+        "verified_params": true
+    },
+    {
+        "question": "网站图标查询 qq.com\n",
+        "result": "<start_function_call>call:get_webpage_images{url:<escape>qq.com<escape>}<end_function_call>",
+        "verified_result": false,
+        "verified_func": false,
+        "verified_params": true
+    },
+    {
+        "question": "提取 github.com 的 icon\n",
+        "result": "<start_function_call>call:get_webpage_images{url:<escape>https://www.github.com<escape>}<end_function_call>",
+        "verified_result": false,
+        "verified_func": false,
+        "verified_params": true
+    },
+    {
+        "question": "提取 https://www.baidu.com 的图片\n",
+        "result": "<start_function_call>call:ping_website_speed{host:<escape>https://www.baidu<escape>}<end_function_call>",
+        "verified_result": false,
+        "verified_func": false,
+        "verified_params": false
+    },
+    {
+        "question": "获取网页 https://www.google.com 上的所有图\n",
+        "result": "<start_function_call>call:ping_website_speed{host:<escape>https://www.google.com<escape>}<end_function_call>",
+        "verified_result": false,
+        "verified_func": false,
+        "verified_params": false
+    },
+    {
+        "question": "扫描 https://github.com 的图片链接\n",
+        "result": "<start_function_call>call:ping_website_speed{host:<escape>https://github.com<escape>}<end_function_call>",
+        "verified_result": false,
+        "verified_func": false,
+        "verified_params": false
+    },
+    {
+        "question": "解析 https://www.bing.com 的图片 url\n",
+        "result": "<start_function_call>call:ping_website_speed{host:<escape>bing.com<escape>,tyep:<escape>json<escape>}<end_function_call>",
+        "verified_result": false,
+        "verified_func": false,
+        "verified_params": false
+    },
+    {
+        "question": "生成一张随机 AI 图片\n",
+        "result": "<start_function_call>call:generate_random_ai_image{}<end_function_call>",
+        "verified_result": true,
+        "verified_func": true,
+        "verified_params": true
+    },
+    {
+        "question": "画一张随机图\n",
+        "result": "I cannot assist with generating random HTML color codes. My current capabilities are focused on calling specific tools for email management, phone number management, mapping, and retrieving data. I cannot create or generate image files.",
+        "verified_result": false,
+        "verified_func": false,
+        "verified_params": false
+    },
+    {
+        "question": "创建 AI 绘画图片\n",
+        "result": "I can assist with generating AI-powered artwork. To create a suitable image for you, could you please specify the desired output format?",
+        "verified_result": false,
+        "verified_func": false,
+        "verified_params": false
+    },
+    {
+        "question": "生成随机图像 json 格式\n",
+        "result": "<start_function_call>call:generate_random_ai_image{}<end_function_call>",
+        "verified_result": true,
+        "verified_func": true,
+        "verified_params": true
+    },
+    {
+        "question": "查 13800138000 是不是骚扰电话\n",
+        "result": "<start_function_call>call:check_harassment_phone{tel:<escape>13800138000<escape>}<end_function_call>",
+        "verified_result": true,
+        "verified_func": true,
+        "verified_params": true
+    },
+    {
+        "question": "检测号码 13900000000 是否 spam\n",
+        "result": "<start_function_call>call:query_food_calories{food:<escape>apple<escape>}<end_function_call><start_function_call>call:get_domain_whois{url:<escape>1390000000<escape>}<end_function_call>",
+        "verified_result": false,
+        "verified_func": false,
+        "verified_params": false
+    },
+    {
+        "question": "查询电话 13700000000 标记信息\n",
+        "result": "<start_function_call>call:get_phone_location{tel:<escape>13700000000<escape>}<end_function_call>",
+        "verified_result": false,
+        "verified_func": false,
+        "verified_params": true
+    },
+    {
+        "question": "这个号 13600000000 是骚扰电话吗\n",
+        "result": "<start_function_call>call:ping_website_speed{host:<escape>1360000000<escape>,tyep:<escape>1360000000<escape>}<end_function_call>",
+        "verified_result": false,
+        "verified_func": false,
+        "verified_params": false
+    },
+    {
+        "question": "估算车牌京 A12345 价值\n",
+        "result": "<start_function_call>call:estimate_license_plate_value{che:<escape>A12345<escape>}<end_function_call>",
+        "verified_result": true,
+        "verified_func": true,
+        "verified_params": true
+    },
+    {
+        "question": "车牌估值 沪 B67890\n",
+        "result": "I apologize, but I cannot assist with estimating the value of a vehicle license plate. My current tools are designed for specific tasks related to logistics, car maintenance, and e-commerce, such as sending emails or querying phone numbers. I cannot provide financial or automotive insights.",
+        "verified_result": false,
+        "verified_func": false,
+        "verified_params": false
+    },
+    {
+        "question": "查询车牌 粤 A11111 价格\n",
+        "result": "<start_function_call>call:get_license_plate_value{che:<escape>A11111<escape>}<end_function_call>",
+        "verified_result": true,
+        "verified_func": true,
+        "verified_params": true
+    },
+    {
+        "question": "评估车牌 浙 C22222 价值\n",
+        "result": "<start_function_call>call:estimate_license_plate_value{che:<escape> 浙<escape>}<end_function_call>",
+        "verified_result": false,
+        "verified_func": true,
+        "verified_params": false
+    },
+    {
+        "question": "ping 一下 www.qq.com\n",
+        "result": "<start_function_call>call:ping_website_speed{host:<escape>qq.com<escape>}<end_function_call>",
+        "verified_result": true,
+        "verified_func": true,
+        "verified_params": true
+    },
+    {
+        "question": "测试 www.baidu.com 网速\n",
+        "result": "<start_function_call>call:ping_website_speed{host:<escape>www.baidu.com<escape>}<end_function_call>",
+        "verified_result": true,
+        "verified_func": true,
+        "verified_params": true
+    },
+    {
+        "question": "查询 www.google.com 延迟\n",
+        "result": "<start_function_call>call:get_webpage_images{url:<escape>www.google.com<escape>}<end_function_call>",
+        "verified_result": false,
+        "verified_func": false,
+        "verified_params": false
+    },
+    {
+        "question": "测速 www.github.com\n",
+        "result": "<start_function_call>call:ping_website_speed{host:<escape>www.github.com<escape>}<end_function_call>",
+        "verified_result": true,
+        "verified_func": true,
+        "verified_params": true
+    },
+    {
+        "question": "生成一个随机颜色\n",
+        "result": "<start_function_call>call:generate_random_ai_image{}<end_function_call>",
+        "verified_result": false,
+        "verified_func": false,
+        "verified_params": false
+    },
+    {
+        "question": "获取随机 html 色值\n",
+        "result": "<start_function_call>call:get_random_html_color{}<end_function_call>",
+        "verified_result": true,
+        "verified_func": true,
+        "verified_params": true
+    },
+    {
+        "question": "给我一个随机十六进制颜色\n",
+        "result": "<start_function_call>call:get_random_html_color{}<end_function_call>",
+        "verified_result": true,
+        "verified_func": true,
+        "verified_params": true
+    },
+    {
+        "question": "生成深色随机颜色",
+        "result": "<start_function_call>call:generate_random_ai_image{}<end_function_call>",
+        "verified_result": false,
+        "verified_func": false,
+        "verified_params": false
+    }
+]

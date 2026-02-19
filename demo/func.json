@@ -1,0 +1,453 @@
+[
+    {
+        "type": "function",
+        "function": {
+            "name": "send_email",
+            "description": "Send an email to a specified person or group.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "receiver": {
+                        "type": "string",
+                        "description": "The recipients of the email, e.g. 张三，李四"
+                    },
+                    "title": {
+                        "type": "string",
+                        "description": "The subject of the email, e.g. Greet"
+                    },
+                    "body": {
+                        "type": "string",
+                        "description": "The content of the email, e.g. hello!"
+                    }
+                },
+                "required": ["receiver"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "call_phone",
+            "description": "Call a specified person by number.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "callee": {
+                        "type": "number",
+                        "description": "The phone number of the person to call, e.g. 小明"
+                    }
+                },
+                "required": ["callee"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "get_time",
+            "description": "Query the current time.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "timezone": {
+                        "type": "string",
+                        "description": "The timezone string, e.g. Asia/Shanghai"
+                    }
+                },
+                "required": []
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "move_to",
+            "description": "Move the car to a specific position.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "position_x": {
+                        "type": "number",
+                        "description": "The X coordinate, e.g. 2.1"
+                    },
+                    "position_y": {
+                        "type": "number",
+                        "description": "The Y coordinate, e.g. 3.4"
+                    },
+                    "position_z": {
+                        "type": "number",
+                        "description": "The Z coordinate, e.g. 5.6"
+                    }
+                },
+                "required": ["position_x", "position_y", "position_z"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "get_current_temperature",
+            "description": "Gets the current temperature for a given location.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "location": {
+                        "type": "string",
+                        "description": "The city name, e.g. San Francisco"
+                    }
+                },
+                "required": ["location"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "get_lunar_calendar",
+            "description": "获取农历日期信息，包括公历日期、农历日期及节气等。",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "type": {
+                        "type": "string",
+                        "description": "选填返回格式：json 或 txt。如果不填，默认为 txt。",
+                        "enum": [
+                            "json",
+                            "txt"
+                        ]
+                    }
+                },
+                "required": []
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "get_phone_location",
+            "description": "查询手机号的归属地、运营商及吉凶信息。",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "tel": {
+                        "type": "string",
+                        "description": "需要查询的手机号码"
+                    }
+                },
+                "required": [
+                    "tel"
+                ]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "get_domain_whois",
+            "description": "查询域名的WHOIS信息，包括注册商、创建日期、过期日期等详细信息。",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "url": {
+                        "type": "string",
+                        "description": "需要查询的域名"
+                    }
+                },
+                "required": [
+                    "url"
+                ]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "get_gas_price",
+            "description": "查询指定省份的油价信息，包括92号、95号、98号汽油及0号柴油的价格。",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "province": {
+                        "type": "string",
+                        "description": "需要查询油价的省份名称"
+                    },
+                    "type": {
+                        "type": "string",
+                        "description": "选填返回格式：json 或 txt。不填默认 json",
+                        "enum": [
+                            "json",
+                            "txt"
+                        ]
+                    }
+                },
+                "required": [
+                    "province"
+                ]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "get_simp_diary",
+            "description": "获取舔狗日记内容，通常是一段关于单相思的幽默、自嘲或伤感的文本。",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "type": {
+                        "type": "string",
+                        "description": "选填返回格式：text, json, js。不填默认文本返回",
+                        "enum": [
+                            "text",
+                            "json",
+                            "js"
+                        ]
+                    }
+                },
+                "required": []
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "get_express_info",
+            "description": "查询快递单号的物流信息，可指定返回格式",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "description": "需要获取物流信息的快递单号"
+                    },
+                    "type": {
+                        "type": "string",
+                        "description": "选填返回格式：text 或 json，不填默认 json",
+                        "enum": [
+                            "text",
+                            "json"
+                        ]
+                    }
+                },
+                "required": [
+                    "id"
+                ]
+            }
+        }
+    },    
+    {
+        "type": "function",
+        "function": {
+            "name": "get_box_office",
+            "description": "查询全网票房信息，包含影片排名、票房数据、排片率等数据",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "type": {
+                        "type": "string",
+                        "description": "选填返回格式：json 或 txt，不填默认 json",
+                        "enum": [
+                            "json",
+                            "txt"
+                        ]
+                    }
+                },
+                "required": []
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "get_domain_reg",
+            "description": "查询域名注册情况，返回Json格式结果",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "url": {
+                        "type": "string",
+                        "description": "需要查询的域名"
+                    }
+                },
+                "required": [
+                    "url"
+                ]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "get_license_plate_value",
+            "description": "Estimate the value of a vehicle license plate number",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "che": {
+                        "type": "string",
+                        "description": "The license plate number to query"
+                    }
+                },
+                "required": [
+                    "che"
+                ]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "query_food_calories",
+            "description": "Queries the calorie count and nutritional information for a specific food item.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "food": {
+                        "type": "string",
+                        "description": "The name of the food item to query, e.g., 'apple', 'rice', or 'chicken breast'."
+                    }
+                },
+                "required": [
+                    "food"
+                ]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "get_website_favicon",
+            "description": "Retrieves the favicon (ICO) image for a specified website domain.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "url": {
+                        "type": "string",
+                        "description": "The domain name of the website to retrieve the icon for, e.g., 'tiktok.com'."
+                    }
+                },
+                "required": [
+                    "url"
+                ]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "get_webpage_images",
+            "description": "Extracts and returns all image URLs found on a specific webpage.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "url": {
+                        "type": "string",
+                        "description": "The target webpage URL to scan for images. Must include the protocol (e.g., http:// or https://)."
+                    },
+                    "type": {
+                        "type": "string",
+                        "description": "The desired return format for the image list. Options are 'json' or 'txt'. Defaults to 'json' if not specified."
+                    }
+                },
+                "required": [
+                    "url"
+                ]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "generate_random_ai_image",
+            "description": "Generates a random AI-drawn image. The API supports returning the result in different formats.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "type": {
+                        "type": "string",
+                        "description": "Optional parameter to specify the return format. Available options are 'txt', 'json', or 'image'. If omitted, it defaults to 'image'."
+                    }
+                },
+                "required": []
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "check_harassment_phone",
+            "description": "Queries a specific phone number to check if it is marked as a harassment or spam call, returning identification data and location info.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "tel": {
+                        "type": "string",
+                        "description": "The phone number to query."
+                    }
+                },
+                "required": [
+                    "tel"
+                ]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "estimate_license_plate_value",
+            "description": "Estimates the value of a vehicle based on its license plate number.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "che": {
+                        "type": "string",
+                        "description": "The license plate number to query."
+                    }
+                },
+                "required": [
+                    "che"
+                ]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "ping_website_speed",
+            "description": "Performs a ping speed test on a specified website domain to measure network latency. The API supports returning results in either text or JSON format.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "host": {
+                        "type": "string",
+                        "description": "The domain name to query (e.g., 'qq.com')."
+                    },
+                    "tyep": {
+                        "type": "string",
+                        "description": "Optional parameter specifying the return format. Available options are 'json' or 'txt'. Defaults to 'txt' if not provided. Note: The parameter name is spelled 'tyep' in the documentation."
+                    }
+                },
+                "required": [
+                    "host"
+                ]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "get_random_html_color",
+            "description": "Generates a random hexadecimal HTML color code. It can optionally filter for dark or light shades.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "type": {
+                        "type": "string",
+                        "description": "Optional parameter to specify the color shade. Accepts 'dark' or 'light'. If omitted, it defaults to a random light color."
+                    }
+                },
+                "required": []
+            }
+        }
+    }                                                  
+]
