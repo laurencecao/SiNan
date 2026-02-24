@@ -220,6 +220,18 @@ class FunctionGemmaTrainer:
 
         # 创建 Trainer - 动态检测支持的参数
         import inspect
+        from datasets import Dataset as HFDataset
+        
+        # 转换数据集格式（如果是 list，转换为 HuggingFace Dataset）
+        if isinstance(train_dataset, list):
+            logger.info("将 list 格式的训练数据集转换为 HuggingFace Dataset...")
+            train_dataset = HFDataset.from_list(train_dataset)
+            logger.info(f"✅ 转换完成，数据集大小：{len(train_dataset)}")
+        
+        if eval_dataset is not None and isinstance(eval_dataset, list):
+            logger.info("将 list 格式的评估数据集转换为 HuggingFace Dataset...")
+            eval_dataset = HFDataset.from_list(eval_dataset)
+            logger.info(f"✅ 转换完成，数据集大小：{len(eval_dataset)}")
         
         # 获取 SFTTrainer 的签名
         sig = inspect.signature(SFTTrainer.__init__)
