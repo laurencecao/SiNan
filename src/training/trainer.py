@@ -123,7 +123,6 @@ class FunctionGemmaTrainer:
             num_train_epochs=tcfg.get("epochs", 3),
             logging_steps=tcfg.get("logging_steps", 10),
             save_steps=tcfg.get("save_steps", 100),
-            evaluation_strategy="steps" if eval_dataset is not None else "no",
             bf16=(self.dtype == "bfloat16"),
             fp16=(self.dtype == "float16"),
             report_to="wandb"
