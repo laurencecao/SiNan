@@ -142,7 +142,8 @@ class FunctionGemmaTrainer:
             if lcfg.get("wandb", {}).get("enabled", False)
             else None,
             packing=False,
-            dataset_num_proc=1,  # ✅ critical: avoid pickle
+            dataset_num_proc=1,        # ✅ avoid Dataset.map multiprocessing
+            dataloader_num_workers=0,  # ✅ avoid DataLoader pickle (callbacks / config)
         )
 
         logger.info("Initializing SFTTrainer (stable mode)")
