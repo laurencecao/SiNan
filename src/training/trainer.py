@@ -210,6 +210,10 @@ class FunctionGemmaTrainer:
             'bf16': self.dtype == "bfloat16",
             'seed': int(seed),
             'report_to': "wandb" if self.config.logging.wandb.enabled else "none",
+            # 强制单进程处理数据，避免 OmegaConf 对象序列化问题
+            'dataset_num_proc': 1,
+            'dataloader_num_workers': 0,
+            'remove_unused_columns': False,
         }
         
         # 如果有评估数据集，添加评估策略
