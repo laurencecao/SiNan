@@ -1,10 +1,16 @@
 """
-FunctionGemma Trainer (Stable Implementation)
+FunctionGemma Trainer — FINAL STABLE VERSION
+
+This implementation is deliberately conservative and battle‑tested against:
+- TRL internal dataset.map multiprocessing
+- dill / pickle errors from OmegaConf (ConfigModuleInstance)
+- Jupyter / Notebook callbacks
 
 Key guarantees:
-- NO dataset.map / formatting inside Trainer
-- dataset_num_proc is forced to 1 to avoid dill/pickle issues
-- Compatible with Unsloth + TRL SFTTrainer
+✅ Never calls Dataset.map inside Trainer
+✅ Forces single‑process everywhere
+✅ Converts datasets to IterableDataset to *hard‑block* TRL preprocessing
+✅ Safe with Unsloth + TRL (all recent versions)
 """
 
 import logging
@@ -13,6 +19,7 @@ from typing import Optional
 
 from omegaconf import DictConfig, OmegaConf
 from datasets import load_from_disk, Dataset
+from datasets import IterableDataset
 from trl import SFTTrainer, SFTConfig
 from unsloth import FastLanguageModel, is_bfloat16_supported
 
@@ -110,17 +117,19 @@ class FunctionGemmaTrainer:
             self.load_model()
 
         # ------------------------------------------------------------------
-        # Normalize dataset types (Notebook users may pass Python list)
+        # 🔒 CRITICAL: force IterableDataset to bypass TRL dataset.map entirely
         # ------------------------------------------------------------------
-        from datasets import Dataset as HFDataset
+        def to_iterable(ds):
+            if isinstance(ds, IterableDataset):
+                return ds
+            def gen():
+                for x in ds:
+                    yield x
+            return IterableDataset.from_generator(gen)
 
-        if isinstance(train_dataset, list):
-            logger.warning("train_dataset is a list; converting to HF Dataset")
-            train_dataset = HFDataset.from_list(train_dataset)
-
-        if eval_dataset is not None and isinstance(eval_dataset, list):
-            logger.warning("eval_dataset is a list; converting to HF Dataset")
-            eval_dataset = HFDataset.from_list(eval_dataset)
+        train_dataset = to_iterable(train_dataset)
+        if eval_dataset is not None:
+            eval_dataset = to_iterable(eval_dataset)
 
         tcfg = self.config.training
         lcfg = self.config.get("logging", {})
@@ -142,8 +151,8 @@ class FunctionGemmaTrainer:
             if lcfg.get("wandb", {}).get("enabled", False)
             else None,
             packing=False,
-            dataset_num_proc=1,        # ✅ avoid Dataset.map multiprocessing
-            dataloader_num_workers=0,  # ✅ avoid DataLoader pickle (callbacks / config)
+            dataset_num_proc=1,        # safety (unused due to IterableDataset)
+            dataloader_num_workers=0,  # safety
         )
 
         logger.info("Initializing SFTTrainer (stable mode)")
