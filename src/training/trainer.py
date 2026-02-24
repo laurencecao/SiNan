@@ -119,6 +119,14 @@ class FunctionGemmaTrainer:
         # ------------------------------------------------------------------
         # 🔒 CRITICAL: force IterableDataset to bypass TRL dataset.map entirely
         # ------------------------------------------------------------------
+        # Keep original length if available (IterableDataset has no __len__)
+        train_len = None
+        if hasattr(train_dataset, "__len__"):
+            try:
+                train_len = len(train_dataset)
+            except Exception:
+                train_len = None
+
         def to_iterable(ds):
             if isinstance(ds, IterableDataset):
                 return ds
@@ -134,6 +142,15 @@ class FunctionGemmaTrainer:
         tcfg = self.config.training
         lcfg = self.config.get("logging", {})
 
+        # If dataset has no length (IterableDataset), HF Trainer requires max_steps
+        max_steps = None
+        if train_len is not None:
+            bs = tcfg.get("per_device_train_batch_size", 4)
+            gas = tcfg.get("gradient_accumulation_steps", 4)
+            epochs = tcfg.get("epochs", 3)
+            steps_per_epoch = max(1, train_len // (bs * gas))
+            max_steps = steps_per_epoch * epochs
+
         args = SFTConfig(
             output_dir=output_dir,
             per_device_train_batch_size=tcfg.get("per_device_train_batch_size", 4),
@@ -142,7 +159,8 @@ class FunctionGemmaTrainer:
                 "gradient_accumulation_steps", 4
             ),
             learning_rate=tcfg.get("learning_rate", 2e-4),
-            num_train_epochs=tcfg.get("epochs", 3),
+            num_train_epochs=tcfg.get("epochs", 3) if max_steps is None else None,
+            max_steps=max_steps,
             logging_steps=tcfg.get("logging_steps", 10),
             save_steps=tcfg.get("save_steps", 100),
             bf16=(self.dtype == "bfloat16"),
