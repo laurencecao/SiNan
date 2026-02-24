@@ -171,27 +171,45 @@ class FunctionGemmaTrainer:
             self.load_model()
 
         training_config = self.config.training
+        
+        # 为缺失的配置项添加默认值
+        from omegaconf import OmegaConf
+        
+        # 获取配置值，如果缺失则使用默认值
+        per_device_train_batch_size = OmegaConf.select(training_config, 'per_device_train_batch_size', default=4)
+        per_device_eval_batch_size = OmegaConf.select(training_config, 'per_device_eval_batch_size', default=4)
+        gradient_accumulation_steps = OmegaConf.select(training_config, 'gradient_accumulation_steps', default=4)
+        learning_rate = OmegaConf.select(training_config, 'learning_rate', default=2e-4)
+        lr_scheduler_type = OmegaConf.select(training_config, 'lr_scheduler_type', default='cosine')
+        warmup_ratio = OmegaConf.select(training_config, 'warmup_ratio', default=0.1)
+        weight_decay = OmegaConf.select(training_config, 'weight_decay', default=0.01)
+        optimizer = OmegaConf.select(training_config, 'optimizer', default='adamw_torch')
+        num_train_epochs = OmegaConf.select(training_config, 'epochs', default=3)
+        logging_steps = OmegaConf.select(training_config, 'logging_steps', default=10)
+        save_steps = OmegaConf.select(training_config, 'save_steps', default=100)
+        eval_steps = OmegaConf.select(training_config, 'eval_steps', default=100)
+        seed = OmegaConf.select(training_config, 'seed', default=42)
 
         # 配置训练参数
         training_args = TrainingArguments(
             output_dir=output_dir or self.config.logging.output_dir,
-            per_device_train_batch_size=training_config.per_device_train_batch_size,
-            per_device_eval_batch_size=training_config.per_device_eval_batch_size,
-            gradient_accumulation_steps=training_config.gradient_accumulation_steps,
-            learning_rate=training_config.learning_rate,
-            lr_scheduler_type=training_config.lr_scheduler_type,
-            warmup_ratio=training_config.warmup_ratio,
-            weight_decay=training_config.weight_decay,
-            optim=training_config.optimizer,
-            num_train_epochs=training_config.epochs,
-            logging_steps=training_config.logging_steps,
-            save_steps=training_config.save_steps,
-            eval_steps=training_config.eval_steps,
+            per_device_train_batch_size=per_device_train_batch_size,
+            per_device_eval_batch_size=per_device_eval_batch_size,
+            gradient_accumulation_steps=gradient_accumulation_steps,
+            learning_rate=learning_rate,
+            lr_scheduler_type=lr_scheduler_type,
+            warmup_ratio=warmup_ratio,
+            weight_decay=weight_decay,
+            optim=optimizer,
+            num_train_epochs=num_train_epochs,
+            logging_steps=logging_steps,
+            save_steps=save_steps,
+            eval_steps=eval_steps,
             evaluation_strategy="steps" if eval_dataset else "no",
             save_total_limit=3,
             fp16=self.dtype == "float16",
             bf16=self.dtype == "bfloat16",
-            seed=training_config.seed,
+            seed=seed,
             report_to="wandb" if self.config.logging.wandb.enabled else "none",
         )
 
