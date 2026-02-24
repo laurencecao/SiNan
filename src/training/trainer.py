@@ -165,6 +165,7 @@ class FunctionGemmaTrainer:
             save_steps=tcfg.get("save_steps", 100),
             bf16=(self.dtype == "bfloat16"),
             fp16=(self.dtype == "float16"),
+            use_liger_kernel=True,  # ✅ skip entropy_from_logits (Unsloth compatibility)
             report_to="wandb"
             if lcfg.get("wandb", {}).get("enabled", False)
             else None,
