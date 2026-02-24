@@ -216,7 +216,20 @@ class FunctionGemmaTrainer:
         if eval_dataset:
             training_args_dict['eval_strategy'] = 'steps'
         
-        training_args = TrainingArguments(**training_args_dict)
+        # 尝试使用 SFTConfig (trl >= 0.12.0)
+        try:
+            from trl import SFTConfig
+            
+            # 解决多进程 pickling 错误：强制使用单进程处理数据集
+            training_args_dict['dataset_num_proc'] = 1
+            training_args_dict['dataset_text_field'] = 'text'
+            # 确保 dataloader 也是单进程
+            training_args_dict['dataloader_num_workers'] = 0
+            
+            training_args = SFTConfig(**training_args_dict)
+        except ImportError:
+            # 兼容老版本 trl
+            training_args = TrainingArguments(**training_args_dict)
 
         # 创建 Trainer - 动态检测支持的参数
         import inspect
