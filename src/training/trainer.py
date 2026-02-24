@@ -236,3 +236,52 @@ class FunctionGemmaTrainer:
             tokenizer.save_pretrained(output_dir)
 
         logger.info("Model and tokenizer saved successfully")
+
+    # ------------------------------------------------------------------
+    # Inference
+    # ------------------------------------------------------------------
+    def inference(
+        self,
+        prompt: str,
+        max_new_tokens: int = 256,
+        temperature: float = 0.2,
+        top_p: float = 0.95,
+    ) -> str:
+        """
+        Simple inference helper for notebooks / quick tests.
+
+        Args:
+            prompt: input text prompt
+            max_new_tokens: generation length
+            temperature: sampling temperature
+            top_p: nucleus sampling p
+
+        Returns:
+            generated text
+        """
+        if self.model is None:
+            raise RuntimeError("Model not loaded. Train or load the model first.")
+
+        # Resolve tokenizer
+        tokenizer = getattr(self.trainer, "tokenizer", None)
+        if tokenizer is None and hasattr(self.model, "tokenizer"):
+            tokenizer = self.model.tokenizer
+        if tokenizer is None:
+            raise RuntimeError("Tokenizer not available for inference.")
+
+        self.model.eval()
+
+        import torch
+
+        inputs = tokenizer(prompt, return_tensors="pt").to(self.model.device)
+
+        with torch.no_grad():
+            outputs = self.model.generate(
+                **inputs,
+                max_new_tokens=max_new_tokens,
+                do_sample=True,
+                temperature=temperature,
+                top_p=top_p,
+            )
+
+        return tokenizer.decode(outputs[0], skip_special_tokens=True)
