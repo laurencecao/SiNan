@@ -84,10 +84,38 @@ class FunctionGemmaTrainer:
         # 配置 LoRA
         if lora_config.enabled:
             logger.info("配置 LoRA...")
+            
+            # 确保所有 LoRA 参数都有默认值
+            if not hasattr(lora_config, 'dropout') or lora_config.dropout is None:
+                lora_config.dropout = 0.0
+            if not hasattr(lora_config, 'bias') or lora_config.bias is None:
+                lora_config.bias = "none"
+            if not hasattr(lora_config, 'use_gradient_checkpointing') or lora_config.use_gradient_checkpointing is None:
+                lora_config.use_gradient_checkpointing = True
+            
+            # 确保 target_modules 是 Python 原生列表或字符串
+            from omegaconf import OmegaConf
+            target_modules_raw = lora_config.target_modules
+            logger.info(f"原始 target_modules 类型：{type(target_modules_raw)}")
+            
+            # 使用 to_container 转换为原生 Python 对象
+            target_modules = OmegaConf.to_container(target_modules_raw, resolve=True)
+            logger.info(f"to_container 后类型：{type(target_modules)}")
+            
+            # 如果是列表，确保是纯 Python list
+            if isinstance(target_modules, (list, tuple)):
+                target_modules = [str(x) for x in target_modules]
+            
+            logger.info(f"最终 target_modules: {target_modules}")
+            logger.info(f"最终 target_modules 类型：{type(target_modules)}")
+            
+            # 验证类型
+            assert type(target_modules) in (list, tuple, str), f"target_modules 类型错误：{type(target_modules)}"
+            
             self.model = FastLanguageModel.get_peft_model(
                 self.model,
                 r=lora_config.rank,
-                target_modules=lora_config.target_modules,
+                target_modules=target_modules,
                 lora_alpha=lora_config.alpha,
                 lora_dropout=lora_config.dropout,
                 bias=lora_config.bias,
