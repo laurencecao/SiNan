@@ -208,3 +208,31 @@ class FunctionGemmaTrainer:
 
         logger.info("Starting training")
         return self.trainer.train()
+
+    # ------------------------------------------------------------------
+    # Save
+    # ------------------------------------------------------------------
+    def save_model(self, output_dir: str):
+        """
+        Save the trained model and tokenizer safely.
+
+        This mirrors HuggingFace Trainer.save_model behavior and is compatible
+        with Unsloth / PEFT models.
+        """
+        if self.trainer is None:
+            raise RuntimeError("Trainer has not been initialized. Call train() first.")
+
+        logger.info(f"Saving model to {output_dir}")
+
+        # Save via trainer to ensure PEFT adapters are handled correctly
+        self.trainer.save_model(output_dir)
+
+        # Tokenizer may live on the model (Unsloth) or be separate
+        tokenizer = getattr(self.trainer, "tokenizer", None)
+        if tokenizer is None and hasattr(self.model, "tokenizer"):
+            tokenizer = self.model.tokenizer
+
+        if tokenizer is not None:
+            tokenizer.save_pretrained(output_dir)
+
+        logger.info("Model and tokenizer saved successfully")
