@@ -109,6 +109,19 @@ class FunctionGemmaTrainer:
         if self.model is None:
             self.load_model()
 
+        # ------------------------------------------------------------------
+        # Normalize dataset types (Notebook users may pass Python list)
+        # ------------------------------------------------------------------
+        from datasets import Dataset as HFDataset
+
+        if isinstance(train_dataset, list):
+            logger.warning("train_dataset is a list; converting to HF Dataset")
+            train_dataset = HFDataset.from_list(train_dataset)
+
+        if eval_dataset is not None and isinstance(eval_dataset, list):
+            logger.warning("eval_dataset is a list; converting to HF Dataset")
+            eval_dataset = HFDataset.from_list(eval_dataset)
+
         tcfg = self.config.training
         lcfg = self.config.get("logging", {})
 
