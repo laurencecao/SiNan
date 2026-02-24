@@ -218,28 +218,40 @@ class FunctionGemmaTrainer:
         
         training_args = TrainingArguments(**training_args_dict)
 
-        # 创建 Trainer
-        # 注意：SFTTrainer 的参数可能因版本而异，使用 **kwargs 方式传递
-        trainer_kwargs = {
+        # 创建 Trainer - 动态检测支持的参数
+        import inspect
+        
+        # 获取 SFTTrainer 的签名
+        sig = inspect.signature(SFTTrainer.__init__)
+        valid_params = set(sig.parameters.keys())
+        
+        # 构建所有可能的参数
+        all_kwargs = {
             'model': self.model,
             'train_dataset': train_dataset,
             'args': training_args,
-            'dataset_text_field': 'text',
             'max_seq_length': self.config.model.max_seq_length,
             'callbacks': callbacks or [],
         }
         
-        # 如果有 tokenizer 且 SFTTrainer 支持该参数
+        # 添加 tokenizer（如果有）
         if hasattr(self, 'tokenizer') and self.tokenizer is not None:
-            # 尝试添加 tokenizer，如果版本不支持会抛出异常
-            try:
-                trainer_kwargs['tokenizer'] = self.tokenizer
-            except Exception:
-                pass
+            all_kwargs['tokenizer'] = self.tokenizer
         
-        # 如果有评估数据集
+        # 添加评估数据集（如果有）
         if eval_dataset:
-            trainer_kwargs['eval_dataset'] = eval_dataset
+            all_kwargs['eval_dataset'] = eval_dataset
+        
+        # 尝试不同的 dataset_text_field 参数名
+        for field_name in ['dataset_text_field', 'dataset_field', 'text_field']:
+            if field_name in valid_params:
+                all_kwargs[field_name] = 'text'
+                break
+        
+        # 只传递 SFTTrainer 支持的参数
+        trainer_kwargs = {k: v for k, v in all_kwargs.items() if k in valid_params or k == 'kwargs'}
+        
+        logger.info(f"SFTTrainer 参数：{list(trainer_kwargs.keys())}")
         
         self.trainer = SFTTrainer(**trainer_kwargs)
 
