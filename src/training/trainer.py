@@ -175,12 +175,34 @@ class FunctionGemmaTrainer:
 
         logger.info("Initializing SFTTrainer (stable mode)")
 
+        # ------------------------------------------------------------------
+        # Provide a safe formatting_func to avoid KeyError: 'text'
+        # This builds a text field from common columns if 'text' is absent.
+        # ------------------------------------------------------------------
+        def formatting_func(example):
+            if isinstance(example, dict):
+                if "text" in example:
+                    return example["text"]
+                # Common SiNan schema
+                if "user_content" in example:
+                    # Serialize tool info if present
+                    parts = [str(example.get("user_content", ""))]
+                    if "tool_name" in example:
+                        parts.append(f"\nTool: {example.get('tool_name')}")
+                    if "tool_arguments" in example:
+                        parts.append(f"\nArgs: {example.get('tool_arguments')}")
+                    return "".join(parts)
+                # Fallback: stringify all fields
+                return " ".join(f"{k}: {v}" for k, v in example.items())
+            return str(example)
+
         self.trainer = SFTTrainer(
             model=self.model,
             args=args,
             train_dataset=train_dataset,
             eval_dataset=eval_dataset,
             callbacks=callbacks,
+            formatting_func=formatting_func,
         )
 
         logger.info("Starting training")
