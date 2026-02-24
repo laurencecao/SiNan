@@ -192,23 +192,23 @@ class FunctionGemmaTrainer:
 
         # 配置训练参数
         training_args_dict = {
-            'output_dir': output_dir or self.config.logging.output_dir,
-            'per_device_train_batch_size': per_device_train_batch_size,
-            'per_device_eval_batch_size': per_device_eval_batch_size,
-            'gradient_accumulation_steps': gradient_accumulation_steps,
-            'learning_rate': learning_rate,
-            'lr_scheduler_type': lr_scheduler_type,
-            'warmup_ratio': warmup_ratio,
-            'weight_decay': weight_decay,
-            'optim': optimizer,
-            'num_train_epochs': num_train_epochs,
-            'logging_steps': logging_steps,
-            'save_steps': save_steps,
-            'eval_steps': eval_steps,
+            'output_dir': str(output_dir) if output_dir else str(self.config.logging.output_dir),
+            'per_device_train_batch_size': int(per_device_train_batch_size),
+            'per_device_eval_batch_size': int(per_device_eval_batch_size),
+            'gradient_accumulation_steps': int(gradient_accumulation_steps),
+            'learning_rate': float(learning_rate),
+            'lr_scheduler_type': str(lr_scheduler_type),
+            'warmup_ratio': float(warmup_ratio),
+            'weight_decay': float(weight_decay),
+            'optim': str(optimizer),
+            'num_train_epochs': int(num_train_epochs),
+            'logging_steps': int(logging_steps),
+            'save_steps': int(save_steps),
+            'eval_steps': int(eval_steps),
             'save_total_limit': 3,
             'fp16': self.dtype == "float16",
             'bf16': self.dtype == "bfloat16",
-            'seed': seed,
+            'seed': int(seed),
             'report_to': "wandb" if self.config.logging.wandb.enabled else "none",
         }
         
@@ -253,12 +253,12 @@ class FunctionGemmaTrainer:
         sig = inspect.signature(SFTTrainer.__init__)
         valid_params = set(sig.parameters.keys())
         
-        # 构建所有可能的参数
+        # 构建所有可能的参数（确保所有值都是纯 Python 类型）
         all_kwargs = {
             'model': self.model,
             'train_dataset': train_dataset,
             'args': training_args,
-            'max_seq_length': self.config.model.max_seq_length,
+            'max_seq_length': int(self.config.model.max_seq_length),
             'callbacks': callbacks or [],
         }
         
