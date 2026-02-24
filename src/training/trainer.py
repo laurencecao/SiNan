@@ -136,7 +136,6 @@ class FunctionGemmaTrainer:
 
         self.trainer = SFTTrainer(
             model=self.model,
-            tokenizer=self.tokenizer,
             args=args,
             train_dataset=train_dataset,
             eval_dataset=eval_dataset,
