@@ -80,6 +80,36 @@ class DataConverter:
         else:
             raise ValueError(f"不支持的文件格式：{suffix}，支持 .xlsx, .xls, .csv")
 
+    def load_dataset(self, data_path: str) -> list[dict]:
+        """
+        加载 JSONL 数据集
+
+        Args:
+            data_path: JSONL 文件路径
+
+        Returns:
+            包含所有样本的列表
+        """
+        path = Path(data_path)
+
+        if not path.exists():
+            raise FileNotFoundError(f"数据文件不存在：{data_path}")
+
+        if path.suffix != ".jsonl":
+            raise ValueError(f"仅支持 .jsonl 格式，当前文件：{path.suffix}")
+
+        logger.info(f"加载 JSONL 数据集：{data_path}")
+
+        dataset = []
+        with open(path, 'r', encoding='utf-8') as f:
+            for line in f:
+                line = line.strip()
+                if line:
+                    dataset.append(json.loads(line))
+
+        logger.info(f"数据集大小：{len(dataset)}")
+        return dataset
+
     def validate_row(self, row: pd.Series) -> tuple[bool, Optional[str]]:
         """
         验证单行数据
