@@ -210,10 +210,6 @@ class FunctionGemmaTrainer:
             'bf16': self.dtype == "bfloat16",
             'seed': int(seed),
             'report_to': "wandb" if self.config.logging.wandb.enabled else "none",
-            # 强制单进程处理数据，避免 OmegaConf 对象序列化问题
-            'dataset_num_proc': 1,
-            'dataloader_num_workers': 0,
-            'remove_unused_columns': False,
         }
         
         # 如果有评估数据集，添加评估策略
@@ -279,6 +275,12 @@ class FunctionGemmaTrainer:
             if field_name in valid_params:
                 all_kwargs[field_name] = 'text'
                 break
+        
+        # 添加数据处理参数（避免多进程序列化问题）
+        if 'dataset_num_proc' in valid_params:
+            all_kwargs['dataset_num_proc'] = 1
+        if 'dataloader_num_workers' in valid_params:
+            all_kwargs['dataloader_num_workers'] = 0
         
         # 只传递 SFTTrainer 支持的参数
         trainer_kwargs = {k: v for k, v in all_kwargs.items() if k in valid_params or k == 'kwargs'}
