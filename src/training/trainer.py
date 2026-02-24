@@ -219,16 +219,29 @@ class FunctionGemmaTrainer:
         training_args = TrainingArguments(**training_args_dict)
 
         # 创建 Trainer
-        self.trainer = SFTTrainer(
-            model=self.model,
-            tokenizer=self.tokenizer,
-            train_dataset=train_dataset,
-            eval_dataset=eval_dataset,
-            args=training_args,
-            dataset_text_field="text",
-            max_seq_length=self.config.model.max_seq_length,
-            callbacks=callbacks or [],
-        )
+        # 注意：SFTTrainer 的参数可能因版本而异，使用 **kwargs 方式传递
+        trainer_kwargs = {
+            'model': self.model,
+            'train_dataset': train_dataset,
+            'args': training_args,
+            'dataset_text_field': 'text',
+            'max_seq_length': self.config.model.max_seq_length,
+            'callbacks': callbacks or [],
+        }
+        
+        # 如果有 tokenizer 且 SFTTrainer 支持该参数
+        if hasattr(self, 'tokenizer') and self.tokenizer is not None:
+            # 尝试添加 tokenizer，如果版本不支持会抛出异常
+            try:
+                trainer_kwargs['tokenizer'] = self.tokenizer
+            except Exception:
+                pass
+        
+        # 如果有评估数据集
+        if eval_dataset:
+            trainer_kwargs['eval_dataset'] = eval_dataset
+        
+        self.trainer = SFTTrainer(**trainer_kwargs)
 
         # 开始训练
         logger.info("开始训练...")
