@@ -36,6 +36,13 @@ class FunctionGemmaTrainer:
         self.tokenizer = None
         self.trainer = None
 
+        # 解决 OmegaConf 对象无法 pickle 的问题
+        # 通过转换为容器再重建，创建一个纯净的 DictConfig 对象
+        # 这一步可以切断 ConfigModuleInstance 的引用链
+        if isinstance(self.config, (DictConfig, list)):
+            from omegaconf import OmegaConf
+            self.config = OmegaConf.create(OmegaConf.to_container(self.config, resolve=True))
+
         # 自动检测数据类型
         self.dtype = self._auto_detect_dtype()
 
