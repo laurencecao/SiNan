@@ -1,0 +1,29 @@
+打开项目路径/Users/laurence/working/projects/SiNan/demo/training_demo。
+我正在为以下这些function call增加训练用的数据，请你依照to_be_enhanced_funcs.json文件，为我生成约每个function call都有100条左右的训练数据。我希望生成的数据尽量拟人化一点，试着模仿一下人会直接对着手机说的话。
+生成的数据放在generated_training_data.xlsx中，结构为：
+
+
+| User Prompt    | Tool Name         | Tool Args                     |
+| -------------- | ----------------- | ----------------------------- |
+| 查询北京天气   | get_weather       | `{"location": "Beijing"}`     |
+| 把背景改成红色 | change_background | `{"color": "red"}`            |
+| 创建新用户     | create_user       | `{"name": "张三", "age": 25}` |
+
+
+现在生成训练数据，function call list如下：
+1. 拨打电话给某人
+2. 查询当前时间
+3. 查询某地的温度
+4. 查询农历日期信息
+5. 查询手机的归属地
+6. 生成一条舔狗日记
+7. 某地油价的查询
+8. 物流单查询
+9. 电影的票房查询
+10. 某地车牌的估价
+11. 查询食物的卡路里热量
+12. 获取网站图标
+13. 抓取网站的图片
+14. 随机生成一张图片
+15. 查询是否骚扰电话
+16. 随机生成一个颜色
