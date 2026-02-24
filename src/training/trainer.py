@@ -222,14 +222,30 @@ class FunctionGemmaTrainer:
         import inspect
         from datasets import Dataset as HFDataset
         
+        def clean_dataset_item(item):
+            """清理数据集中的不可序列化对象，只保留基本类型"""
+            if isinstance(item, dict):
+                return {k: clean_dataset_item(v) for k, v in item.items()}
+            elif isinstance(item, (list, tuple)):
+                return [clean_dataset_item(v) for v in item]
+            elif isinstance(item, (str, int, float, bool, type(None))):
+                return item
+            else:
+                # 对于其他类型（如配置对象），转换为字符串
+                logger.warning(f"数据集中发现非基本类型 {type(item).__name__}，转换为字符串")
+                return str(item)
+        
         # 转换数据集格式（如果是 list，转换为 HuggingFace Dataset）
         if isinstance(train_dataset, list):
             logger.info("将 list 格式的训练数据集转换为 HuggingFace Dataset...")
+            # 先清理数据，确保所有值都是可序列化的
+            train_dataset = [clean_dataset_item(item) for item in train_dataset]
             train_dataset = HFDataset.from_list(train_dataset)
             logger.info(f"✅ 转换完成，数据集大小：{len(train_dataset)}")
         
         if eval_dataset is not None and isinstance(eval_dataset, list):
             logger.info("将 list 格式的评估数据集转换为 HuggingFace Dataset...")
+            eval_dataset = [clean_dataset_item(item) for item in eval_dataset]
             eval_dataset = HFDataset.from_list(eval_dataset)
             logger.info(f"✅ 转换完成，数据集大小：{len(eval_dataset)}")
         
