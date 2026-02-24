@@ -191,27 +191,32 @@ class FunctionGemmaTrainer:
         seed = OmegaConf.select(training_config, 'seed', default=42)
 
         # 配置训练参数
-        training_args = TrainingArguments(
-            output_dir=output_dir or self.config.logging.output_dir,
-            per_device_train_batch_size=per_device_train_batch_size,
-            per_device_eval_batch_size=per_device_eval_batch_size,
-            gradient_accumulation_steps=gradient_accumulation_steps,
-            learning_rate=learning_rate,
-            lr_scheduler_type=lr_scheduler_type,
-            warmup_ratio=warmup_ratio,
-            weight_decay=weight_decay,
-            optim=optimizer,
-            num_train_epochs=num_train_epochs,
-            logging_steps=logging_steps,
-            save_steps=save_steps,
-            eval_steps=eval_steps,
-            evaluation_strategy="steps" if eval_dataset else "no",
-            save_total_limit=3,
-            fp16=self.dtype == "float16",
-            bf16=self.dtype == "bfloat16",
-            seed=seed,
-            report_to="wandb" if self.config.logging.wandb.enabled else "none",
-        )
+        training_args_dict = {
+            'output_dir': output_dir or self.config.logging.output_dir,
+            'per_device_train_batch_size': per_device_train_batch_size,
+            'per_device_eval_batch_size': per_device_eval_batch_size,
+            'gradient_accumulation_steps': gradient_accumulation_steps,
+            'learning_rate': learning_rate,
+            'lr_scheduler_type': lr_scheduler_type,
+            'warmup_ratio': warmup_ratio,
+            'weight_decay': weight_decay,
+            'optim': optimizer,
+            'num_train_epochs': num_train_epochs,
+            'logging_steps': logging_steps,
+            'save_steps': save_steps,
+            'eval_steps': eval_steps,
+            'save_total_limit': 3,
+            'fp16': self.dtype == "float16",
+            'bf16': self.dtype == "bfloat16",
+            'seed': seed,
+            'report_to': "wandb" if self.config.logging.wandb.enabled else "none",
+        }
+        
+        # 如果有评估数据集，添加评估策略
+        if eval_dataset:
+            training_args_dict['eval_strategy'] = 'steps'
+        
+        training_args = TrainingArguments(**training_args_dict)
 
         # 创建 Trainer
         self.trainer = SFTTrainer(
