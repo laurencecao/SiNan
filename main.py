@@ -199,17 +199,20 @@ def export(
     console.print(f"加载模型：{model_path}")
     model, tokenizer = FastLanguageModel.from_pretrained(model_path)
 
-    # 导出
     output_path = export_model(
         model=model,
         tokenizer=tokenizer,
         output_dir=output_dir,
+        #model_path=model_path,
         export_format=format,
         merge_lora=merge_lora,
         quantization=quantization,
     )
-
-    console.print(f"[green]✓ 模型已导出到：{output_path}[/green]")
+    if output_path:
+        console.print(f"[green]✓ 模型已导出到：{output_path}[/green]")
+    else:
+        console.print("[red]✗ 模型导出失败，请查看上方错误日志[/red]")
+        raise typer.Exit(code=1)
 
 
 @app.command()
